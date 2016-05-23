@@ -1,5 +1,5 @@
 # DataVizProject
-Data Visualization Project P6 for Udacity.com  Data Analyst Nanodegree
+Data Visualization Project P6 for Udacity.com  Data Analyst Nanodegree - Heather Capell
 
 SUMMARY
 
