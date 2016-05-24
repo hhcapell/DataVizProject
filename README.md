@@ -15,6 +15,17 @@ I chose to use a bar chart, since this is a very clear way to highlight any diff
 
 FEEDBACK
 
+(1) From Myles Callahan, coach (5/22/16):
+One suggestion, which is down to personal preference, would be to fix the y-axis (so that, when you switch between visualization, the scale is comparable), i.e.
+            y.domain([0, 60]);
+for all charts.
+
+(2) From Meidy Rotinsulu, colleague (5/23/16):
+Is there a way to compare the graphs together or combine two of the graphs so that you can more easily compare them in one view?  Or, can you add caption or text to summarize what you are seeing so that it is easier to remember what is on each chart?
+
+
+(3) From Suzanne Barbas, colleague (5/23/16):
+The bars would look better if they were a little more narrow.  The fonts especially on the axis labels would be better if bigger and easier to read.   
 
 
 RESOURCES
