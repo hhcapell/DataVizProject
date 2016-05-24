@@ -48,7 +48,7 @@
 var margin = {top: 20, right: 20, bottom: 30, left: 40},
     width = 960 - margin.left - margin.right,
     height = 500 - margin.top - margin.bottom;
-    d3.select("#chartcontainer").append("h2").text("Player Average Home Runs (HR) by Height Category");
+    d3.select("#chartcontainer").append("h2").text("Player Average Home Runs (HR) by Height:  Average Height Hits More Home Runs");
 
 var x = d3.scale.ordinal()
     .rangeRoundBands([0, width], .65);
@@ -136,7 +136,7 @@ d3.select("#btn").on("click", function() {
 var margin = {top: 20, right: 20, bottom: 30, left: 40},
     width = 960 - margin.left - margin.right,
     height = 500 - margin.top - margin.bottom;
-    d3.select("#chartcontainer").append("h2").text("Player Average Home Runs (HR) by Weight Category");
+    d3.select("#chartcontainer").append("h2").text("Player Average Home Runs (HR) by Weight:  Average/Above Average Weight Hits More Home Runs");
 
 // find range of x axis for Player Weight
 
@@ -232,7 +232,7 @@ function type(d) {
 var margin = {top: 20, right: 20, bottom: 30, left: 40},
     width = 960 - margin.left - margin.right,
     height = 500 - margin.top - margin.bottom;
-    d3.select("#chartcontainer").append("h2").text("Player Average Home Runs (HR) by Height Category");
+    d3.select("#chartcontainer").append("h2").text("Player Average Home Runs (HR) by Height:  Average Height Hits More Home Runs");
 
 var x = d3.scale.ordinal()
     .rangeRoundBands([0, width], .65);
@@ -319,7 +319,7 @@ function type(d) {
 var margin = {top: 20, right: 20, bottom: 30, left: 40},
     width = 960 - margin.left - margin.right,
     height = 500 - margin.top - margin.bottom;
-    d3.select("#chartcontainer").append("h2").text("Player Average Home Runs (HR) by Handedness");
+    d3.select("#chartcontainer").append("h2").text("Player Average Home Runs (HR) by Handedness:  Lefties Hit More Home Runs");
 
 // find range of x axis for Player Weight
 
@@ -409,6 +409,8 @@ function type(d) {
                 });
 
 </script>
+
+
 
 
 
