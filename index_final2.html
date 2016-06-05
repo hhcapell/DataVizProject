@@ -3,7 +3,17 @@
 
 <style>
 
-h2{
+body{
+  margin:  0 10%;
+  padding:  10px;
+}
+
+#chartcontainer {
+  position:  relative;
+  margin: auto 10%;
+}
+
+h1, h2{
   text-align:  center;
 }
 
@@ -31,36 +41,57 @@ h2{
 <h1> Baseball Player Attributes and Home Run Averages</h1>
 
 <p>
-I wanted to demonstrate how certain Baseball Player attributes -- Height, Weight and Handedness -- impact Player Home Run Averages.   I grouped Players into three categories per attribute, based on whether a Player is Lighter/Medium Weight/Heavier (for Weight attribute) or Shorter/Medium Height/Taller (for Height attribute) relative to other Players within the Baseball dataset, and into Left/Right/Both buckets for the Handedness attribute.  
+I wanted to demonstrate how certain Baseball Player attributes -- Height, Weight and Handedness -- impact Player Home Run Averages.   I grouped Players into three categories per attribute, based on whether a Player is Lighter/Medium Weight/Heavier (for Weight attribute) or Shorter/Medium Height/Taller (for Height attribute) relative to other Players within the Baseball dataset, and into Left/Right/Both buckets for the Handedness attribute.  Before placing into buckets, overall Player Home Run Average is 45.4 Home Runs.
 </p>
 
 <table border="1">
 <tr>
 <th>Height Category</th>
-<th>Bin Range</th>
-<th> <br></br> </th>
+<th>Height Bins</th>
+<th>Height HR Avg.</th>
+<th></th>
 <th>Weight Category</th>
-<th>Bin Range</th>
+<th>Weight Bins</th>
+<th>Weight HR Avg.</th>
+<th></th>
+<th>Handedness</th>
+<th>Handedness HR Avg.</th>
 </tr>
 <tr>
 <td>Shorter</td>
 <td>Under 71 in.</td>
-<td></td>
+<td>35.9 HR Avg.</td>
+<th></th>
 <td>Lighter</td>
 <td>Under 176 lbs.</td>
+<td>35.0 HR Avg.</td>
+<th></th>
+<td>Left</td>
+<td>56.1 HR Avg.</td>
 </tr>
 <tr>
 <td>Medium Height</td>
 <td>71 - 75 in. </td>
-<td></td>
+<td>50.0 HR Avg.</td>
+<th></th>
 <td>Medium Weight</td>
-<td>176 - 205 lbs.</td></tr>
+<td>176 - 205 lbs.</td>
+<td>49.3 HR Avg.</td>
+<th></th>
+<td>Both</td>
+<td>32.1 HR Avg.</td>
+</tr>
 <tr>
 <td>Taller</td>
 <td>Over 75 in.</td>
-<td></td>
+<td>37.4 HR Avg.</td>
+<th></th>
 <td>Heavier</td>
 <td>Over 205 lbs.</td>
+<td>58.4 HR Avg.</td>
+<th></th>
+<td>Right</td>
+<td>42.6 HR Avg.</td>
 </tr></table>
 
 <p>
@@ -86,9 +117,9 @@ When viewing the Baseball Player attributes by these bins, the differences are v
 
 // Default Chart - Height
 
-var margin = {top: 10, right: 20, bottom: 30, left: 40},
-    width = 960 - margin.left - margin.right,
-    height = 375 - margin.top - margin.bottom;
+var margin = {top: 10, right: 30, bottom: 30, left: 20},
+    width = 760 - margin.left - margin.right,
+    height = 360 - margin.top - margin.bottom;
     d3.select("#chartcontainer")
     .append("h2").text("Home Runs by Player Height")
     .append("h5").text("MEDIUM Heights Hit More Home Runs");
@@ -174,9 +205,9 @@ d3.select("#btn").on("click", function() {
 
 // Weight chart
 
-var margin = {top: 10, right: 20, bottom: 30, left: 40},
-    width = 960 - margin.left - margin.right,
-    height = 375 - margin.top - margin.bottom;
+var margin = {top: 10, right: 30, bottom: 30, left: 20},
+    width = 760 - margin.left - margin.right,
+    height = 360 - margin.top - margin.bottom;
     d3.select("#chartcontainer").append("h2").text("Home Runs by Player Weight").append("h5").text("HEAVIER Weights Hit More Home Runs");
 
 // find range of x axis for Player Weight
@@ -270,9 +301,9 @@ function type(d) {
 
 // Height chart
 
-var margin = {top: 10, right: 20, bottom: 30, left: 40},
-    width = 960 - margin.left - margin.right,
-    height = 375 - margin.top - margin.bottom;
+var margin = {top: 10, right: 30, bottom: 30, left: 20},
+    width = 760 - margin.left - margin.right,
+    height = 360 - margin.top - margin.bottom;
     d3.select("#chartcontainer").append("h2").text("Home Runs by Player Height").append("h5").text("MEDIUM Heights Hit More Home Runs");
 
 var x = d3.scale.ordinal()
@@ -353,9 +384,9 @@ function type(d) {
 
 // copy and paste entire script for Handedness chart
 
-var margin = {top: 10, right: 20, bottom: 30, left: 40},
-    width = 960 - margin.left - margin.right,
-    height = 375 - margin.top - margin.bottom;
+var margin = {top: 10, right: 30, bottom: 30, left: 20},
+    width = 760 - margin.left - margin.right,
+    height = 360 - margin.top - margin.bottom;
     d3.select("#chartcontainer").append("h2").text("Home Runs by Player Handedness").append("h5").text("LEFTIES Hit More Home Runs");
 
 // find range of x axis for Player Weight
@@ -456,6 +487,39 @@ When comparing Weight and Height attributes, there is a different dynamic going 
 <br></br>
 For Left-Handed hitters, a different factor leads to the higher Home Run Average.  One explanation is that the Right outfield has a much higher wall than the Left outfield, making left-handed hits to Left outfield easier to clear the wall and result in a home run, versus a retrievable ball that merely bounces off the right wall back to Players that can intercept it in the outfield.
 </p>
+
+<h3>
+Super Player?
+</h3>
+
+<p>
+What if a Player has two or three of the "winning" attribute categories above that are associated with more Home Runs?  I compared Regular Players (defined as those Players with only one or else none of the three winning attributes), to "Super" Players that have two of the winning attributes, and also to "Super Duper" Players that have all three winning attributes.  See the chart below to see the leap in difference between Home Run Averages.   The last category of "Super Duper" Players only has four Players in the category, so results have high variability amongst the Players in that group, but you can still see quite a big difference when compared to overall Player Home Run Average (45.4)!
+<br></br>
+
+</p>
+
+<table border="1">
+<tr>
+<th>Player Type</th>
+<th>Player Count</th>
+<th>Home Run Average</th>
+
+</tr>
+<tr>
+<td>Regular Player</td>
+<td>910 Players</td>
+<td>39.8 HR Avg</td>
+</tr>
+<tr>
+<td>Super Player</td>
+<td>243 Players</td>
+<td>65.2 HR Avg</td></tr>
+<tr>
+<td>Super Duper Player</td>
+<td>4 Players</td>
+<td>94.5 HR Avg</td>
+</tr></table>
+
 
   </body>
 
