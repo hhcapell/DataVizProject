@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+
+<style>
+
+h2{
+  text-align:  center;
+}
+
+.bar {
+  fill: steelblue;
+}
+
+
+.axis {
+  font: 10px sans-serif;
+}
+
+.axis path,
+.axis line {
+  fill: None;
+  stroke: black;
+  shape-rendering: crispEdges;
+}
+
+</style>
+
+
+<body>
+
+<h1> Baseball Player Attributes and Home Run Averages</h1>
+
+<p>
+I wanted to demonstrate how certain Baseball Player attributes -- Height, Weight and Handedness -- impact Player Home Run Averages.   I grouped Players into three categories per attribute, based on whether a Player is Lighter/Medium Weight/Heavier (for Weight attribute) or Shorter/Medium Height/Taller (for Height attribute) relative to other Players within the Baseball dataset, and into Left/Right/Both buckets for the Handedness attribute.  
+</p>
+
+<table border="1">
+<tr>
+<th>Height Category</th>
+<th>Bin Range</th>
+<th> <br></br> </th>
+<th>Weight Category</th>
+<th>Bin Range</th>
+</tr>
+<tr>
+<td>Shorter</td>
+<td>Under 71 in.</td>
+<td></td>
+<td>Lighter</td>
+<td>Under 176 lbs.</td>
+</tr>
+<tr>
+<td>Medium Height</td>
+<td>71 - 75 in. </td>
+<td></td>
+<td>Medium Weight</td>
+<td>176 - 205 lbs.</td></tr>
+<tr>
+<td>Taller</td>
+<td>Over 75 in.</td>
+<td></td>
+<td>Heavier</td>
+<td>Over 205 lbs.</td>
+</tr></table>
+
+<p>
+When viewing the Baseball Player attributes by these bins, the differences are very noticeable.  PRESS one of the Buttons below [Weight - Height - Handedness] to compare Home Run Averages among these Baseball Player attributes.
+</p>
+
+  <div id="myButtons" style="text-align:center;">
+        <button id='btn'>
+            Weight
+        </button>
+        <button id='btn1'>
+            Height
+        </button>
+        <button id='btn2'>
+            Handedness
+        </button>
+    </div>
+    <div id="chartcontainer"></div>
+
+<script src="//d3js.org/d3.v3.min.js"></script>
+<script>
+
+
+// Default Chart - Height
+
+var margin = {top: 10, right: 20, bottom: 30, left: 40},
+    width = 960 - margin.left - margin.right,
+    height = 375 - margin.top - margin.bottom;
+    d3.select("#chartcontainer")
+    .append("h2").text("Home Runs by Player Height")
+    .append("h5").text("MEDIUM Heights Hit More Home Runs");
+
+var x = d3.scale.ordinal()
+    .rangeRoundBands([0, width], .65);
+
+var y = d3.scale.linear()
+    .range([height, 0]);
+
+var xAxis = d3.svg.axis()
+    .scale(x)
+    .orient("bottom");
+
+var yAxis = d3.svg.axis()
+    .scale(y)
+    .orient("left")
+
+var svg = d3.select("#chartcontainer").append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+
+d3.csv("baseball_ht-avg.csv", type, function(error, data) {
+      
+      if (error) throw error;
+
+      var barValue = function(d) { return d.height; };
+
+
+      x.domain(data.map(function(d) { return d.height; }));
+      y.domain([0, 60]);
+
+       svg.append("g")
+          .attr("class", "x axis")
+          .attr("transform", "translate(0," + height + ")")
+          .call(xAxis)
+          .append("text")
+          .attr("class", "label")
+          .attr("x", width+20)
+          .attr("y", 20)
+          .attr("dx", "-2em")
+          .style("text-anchor", "end")
+          .style("font-weight", "bold")
+          .style("font-size", "12px")
+          .text("Height");
+
+      svg.append("g")
+          .attr("class", "y axis")
+          .call(yAxis)
+          .append("text")
+          .attr("transform", "rotate(-90)")
+          .attr("y", 0)
+          .attr("dy", "1.75em")
+          .style("text-anchor", "end")
+          .style("font-weight", "bold")
+          .style("font-size", "12px")
+          .text("Home Run Average");
+
+      svg.selectAll(".bar")
+          .data(data)
+          .enter().append("rect")
+          .attr("class", "bar")
+          .attr("x", function(d) { return x(d.height); })
+          .attr("width", x.rangeBand())
+          .attr("y", function(d) { return y(d.HR); })
+          .attr("height", function(d) { return height - y(d.HR); })
+          .style("fill", function(d, i){return d.HR>49.4?"green":"steelblue";});
+    });
+
+
+function type(d) {
+  d.HR = +d.HR;
+  return d;
+}
+
+// event handlers for buttons
+
+d3.select("#btn").on("click", function() {
+                d3.select("#chartcontainer").selectAll("*").remove();
+
+// Weight chart
+
+var margin = {top: 10, right: 20, bottom: 30, left: 40},
+    width = 960 - margin.left - margin.right,
+    height = 375 - margin.top - margin.bottom;
+    d3.select("#chartcontainer").append("h2").text("Home Runs by Player Weight").append("h5").text("HEAVIER Weights Hit More Home Runs");
+
+// find range of x axis for Player Weight
+
+var x = d3.scale.ordinal()
+    .rangeRoundBands([0, width], .65);
+
+// find range of y axis for Player Home Runs (HR's)
+
+var y = d3.scale.linear()
+    .range([height, 0]);
+
+var xAxis = d3.svg.axis()
+    .scale(x)
+    .orient("bottom");
+
+var yAxis = d3.svg.axis()
+    .scale(y)
+    .orient("left")
+
+var svg = d3.select("#chartcontainer").append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+d3.csv("baseball_wt-avg.csv", type, function(error, data) {
+      
+      if (error) throw error;
+
+      var barValue = function(d) { return d.height; };
+
+      // sorting
+      var sortedData = data.sort(function(a, b) {
+        return d3.ascending(barValue(a), barValue(b)); 
+      }); 
+
+      // create x axis for Player Weight
+
+      x.domain(sortedData.map(function(d) { return d.weight; }));
+
+      // create y axis for Player Home Runs (HR's)
+
+      y.domain([0, 60]);
+
+      svg.append("g")
+          .attr("class", "x axis")
+          .attr("transform", "translate(0," + height + ")")
+          .call(xAxis)
+          .append("text")
+          .attr("class", "label")
+          .attr("x", width+20)
+          .attr("y", 20)
+          .attr("dx", "-2em")
+          .style("text-anchor", "end")
+          .style("font-weight", "bold")
+          .style("font-size", "12px")
+          .text("Weight");
+
+      svg.append("g")
+          .attr("class", "y axis")
+          .call(yAxis)
+        .append("text")
+          .attr("transform", "rotate(-90)")
+          .attr("y", 0)
+          .attr("dy", "1.75em")
+          .style("text-anchor", "end")
+          .style("font-weight", "bold")
+          .style("font-size", "12px")
+          .text("Home Run Average");
+
+      svg.selectAll(".bar")
+          .data(data)
+          .enter().append("rect")
+          .attr("class", "bar")
+          .attr("x", function(d) { return x(d.weight); })
+          .attr("width", x.rangeBand())
+          .attr("y", function(d) { return y(d.HR); })
+          .attr("height", function(d) { return height - y(d.HR); })
+          .style("fill", function(d, i){return d.HR>49.4?"green":"steelblue";});
+    });
+
+function type(d) {
+  d.HR = +d.HR;
+  return d;
+}
+
+                });
+                d3.select("#btn1").on("click", function() {
+                d3.select("#chartcontainer").selectAll("*").remove();
+
+// Height chart
+
+var margin = {top: 10, right: 20, bottom: 30, left: 40},
+    width = 960 - margin.left - margin.right,
+    height = 375 - margin.top - margin.bottom;
+    d3.select("#chartcontainer").append("h2").text("Home Runs by Player Height").append("h5").text("MEDIUM Heights Hit More Home Runs");
+
+var x = d3.scale.ordinal()
+    .rangeRoundBands([0, width], .65);
+
+var y = d3.scale.linear()
+    .range([height, 0]);
+
+var xAxis = d3.svg.axis()
+    .scale(x)
+    .orient("bottom");
+
+var yAxis = d3.svg.axis()
+    .scale(y)
+    .orient("left")
+
+var svg = d3.select("#chartcontainer").append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+d3.csv("baseball_ht-avg.csv", type, function(error, data) {
+      
+      if (error) throw error;
+
+      var barValue = function(d) { return d.height; };
+
+
+      x.domain(data.map(function(d) { return d.height; }));
+      y.domain([0, 60]);
+
+      svg.append("g")
+          .attr("class", "x axis")
+          .attr("transform", "translate(0," + height + ")")
+          .call(xAxis)
+          .append("text")
+          .attr("class", "label")
+          .attr("x", width+20)
+          .attr("y", 20)
+          .attr("dx", "-2em")
+          .style("text-anchor", "end")
+          .style("font-weight", "bold")
+          .style("font-size", "12px")
+          .text("Height");
+
+      svg.append("g")
+          .attr("class", "y axis")
+          .call(yAxis)
+          .append("text")
+          .attr("transform", "rotate(-90)")
+          .attr("y", 0)
+          .attr("dy", "1.75em")
+          .style("text-anchor", "end")
+          .style("font-weight", "bold")
+          .style("font-size", "12px")
+          .text("Home Run Average");
+
+      svg.selectAll(".bar")
+          .data(data)
+          .enter().append("rect")
+          .attr("class", "bar")
+          .attr("x", function(d) { return x(d.height); })
+          .attr("width", x.rangeBand())
+          .attr("y", function(d) { return y(d.HR); })
+          .attr("height", function(d) { return height - y(d.HR); })
+          .style("fill", function(d, i){return d.HR>49.4?"green":"steelblue";});
+    });
+
+function type(d) {
+  d.HR = +d.HR;
+  return d;
+}
+
+                });
+                d3.select("#btn2").on("click", function() {
+                d3.select("#chartcontainer").selectAll("*").remove();
+
+// copy and paste entire script for Handedness chart
+
+var margin = {top: 10, right: 20, bottom: 30, left: 40},
+    width = 960 - margin.left - margin.right,
+    height = 375 - margin.top - margin.bottom;
+    d3.select("#chartcontainer").append("h2").text("Home Runs by Player Handedness").append("h5").text("LEFTIES Hit More Home Runs");
+
+// find range of x axis for Player Weight
+
+var x = d3.scale.ordinal()
+    .rangeRoundBands([0, width], .65);
+
+// find range of y axis for Player Home Runs (HR's)
+
+var y = d3.scale.linear()
+    .range([height, 0]);
+
+var xAxis = d3.svg.axis()
+    .scale(x)
+    .orient("bottom");
+
+var yAxis = d3.svg.axis()
+    .scale(y)
+    .orient("left")
+
+var svg = d3.select("#chartcontainer").append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+d3.csv("baseball_hand-avg.csv", type, function(error, data) {
+      
+      if (error) throw error;
+
+      var barValue = function(d) { return d.height; };
+
+      // sorting
+      var sortedData = data.sort(function(a, b) {
+        return d3.ascending(barValue(a), barValue(b)); 
+      }); 
+
+      // create x axis for Player handedness
+
+      x.domain(data.map(function(d) { return d.handedness; }));
+
+      // create y axis for Player Home Runs (HR's)
+
+      y.domain([0, 60]);
+
+      svg.append("g")
+          .attr("class", "x axis")
+          .attr("transform", "translate(0," + height + ")")
+          .call(xAxis)
+          .append("text")
+          .attr("class", "label")
+          .attr("x", width+20)
+          .attr("y", 20)
+          .attr("dx", "-2em")
+          .style("text-anchor", "end")
+          .style("font-weight", "bold")
+          .style("font-size", "12px")
+          .text("Handedness");
+
+      svg.append("g")
+          .attr("class", "y axis")
+          .call(yAxis)
+          .append("text")
+          .attr("transform", "rotate(-90)")
+          .attr("y", 0)
+          .attr("dy", "1.75em")
+          .style("text-anchor", "end")
+          .style("font-weight", "bold")
+          .style("font-size", "12px")
+          .text("Home Run Average");
+
+      svg.selectAll(".bar")
+          .data(data)
+          .enter().append("rect")
+          .attr("class", "bar")
+          .attr("x", function(d) { return x(d.handedness); })
+          .attr("width", x.rangeBand())
+          .attr("y", function(d) { return y(d.HR); })
+          .attr("height", function(d) { return height - y(d.HR); })
+          .style("fill", function(d, i){return d.HR>49.4?"green":"steelblue";});
+    });
+
+function type(d) {
+  d.HR = +d.HR;
+  return d;
+}
+
+                }); 
+
+</script>
+
+<h3>
+Drivers of Higher Home Run Averages
+</h3>
+
+<p>
+When comparing Weight and Height attributes, there is a different dynamic going on for each.  Players with Heavier Weights (relative to other Players in the Baseball dataset, that is) have a higher Home Run Average.  This makes sense because Heavier Players will have more power when hitting the ball, resulting in a ball hit greater distances.   The Height attribute is not as intuitive, though, as Medium Height Players have a higher Home Run Average than both Shorter AND Taller Players.  One explanation for this is that pitchers have more experience pitching to Medium Height Players, and therefore have a tendency to not pitch within the strike zone for Shorter or Taller Players, resulting in a Walk to first base, which would preclude a Home Run for a Shorter or Taller Player.
+<br></br>
+For Left-Handed hitters, a different factor leads to the higher Home Run Average.  One explanation is that the Right outfield has a much higher wall than the Left outfield, making left-handed hits to Left outfield easier to clear the wall and result in a home run, versus a retrievable ball that merely bounces off the right wall back to Players that can intercept it in the outfield.
+</p>
+
+  </body>
+
+</html>
